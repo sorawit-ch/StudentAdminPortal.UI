@@ -33,6 +33,10 @@ export class ViewStudentComponent implements OnInit {
       postalAddress:''
     }
   }
+
+  isNewStudent = false;
+  header ="";
+
   genderList:Gender[]=[];
 
   constructor(private readonly studentService: StudentService,
@@ -47,11 +51,24 @@ export class ViewStudentComponent implements OnInit {
         this.studentId = params.get('id');
 
         if(this.studentId){
-          this.studentService.getStudent(this.studentId).subscribe(
-            (successResponse) => {
-              this.student = successResponse;
-            }
-          );
+
+          if(this.studentId.toLowerCase() === 'Add'.toLocaleLowerCase()){
+            this.isNewStudent = true;
+            this.header = 'Add New Student';
+          }else{
+            this.isNewStudent = false;
+            this.header = 'Edit Student';
+
+            this.studentService.getStudent(this.studentId).subscribe(
+              (successResponse) => {
+                this.student = successResponse;
+              }
+            );
+          }
+
+
+
+
           this.genderService.getGenderList().subscribe(
             (successResponse) =>{
               this.genderList = successResponse;
@@ -80,13 +97,30 @@ export class ViewStudentComponent implements OnInit {
   onDelete():void{
     this.studentService.deleteStudent(this.student.id).subscribe(
       (successResponse)=>{
-        console.log(successResponse);
+
         this.snackBar.open('Student Deleted successfully', undefined,{
           duration:2000
         });
 
         setTimeout(() => {
           this.router.navigateByUrl('students');
+        }, 2000);
+      },
+      (errorResponse)=>{
+
+      }
+    )
+  }
+
+  onAdd():void{
+    this.studentService.addStudent(this.student).subscribe(
+      (successResponse)=>{
+        this.snackBar.open('Student added successfully', undefined,{
+          duration:2000
+        });
+
+        setTimeout(() => {
+          this.router.navigateByUrl(`students/${successResponse.id}`);
         }, 2000);
       },
       (errorResponse)=>{
