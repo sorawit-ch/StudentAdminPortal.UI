@@ -16,3 +16,9 @@ table {
 .search-input:focus {
     border: 1px solid#AAA;
 }
+
+.load-center {
+    text-align: center;
+    border: 3px solid green;
+    width: 40%;
+}

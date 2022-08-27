@@ -13,6 +13,8 @@ import { StudentService } from './student.service';
 })
 export class StudentsComponent implements OnInit {
 
+  loaded = false;
+
   students: Student[] = [];
 
   displayedColumns: string[] = ['firstName', 'lastName', 'dateOfBirth', 'email', 'mobile', 'gender', 'edit'];
@@ -40,7 +42,7 @@ export class StudentsComponent implements OnInit {
         {
           this.dataSource.sort = this.matSort;
         }
-
+        this.loaded = true;
       },
       (errorResponse) => {
         console.log(errorResponse);
